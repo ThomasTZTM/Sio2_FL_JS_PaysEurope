@@ -13,26 +13,32 @@ function createElement(tag, attributes = {}, content = '') {
 }
 
 // Fonction pour afficher le détail d'un pays
-function displayCountryDetail(country) {
+function afficherPaysDetail(country) {
     const detailContainer = document.getElementById('country-detail');
     detailContainer.innerHTML = '';
 
-    const card = createElement('div', { class: 'card mb-4' });
+    const card = createElement('div', { class: 'card mb-4 border-4 border-danger' });
     const row = createElement('div', { class: 'row g-0' });
 
     // Colonne de gauche avec l'image
-    const imgCol = createElement('div', { class: 'col-md-4' });
+    const imgCol = createElement('div', { class: 'ms-2 col-md-3 text-center mt-2' });
     const img = createElement('img', {
         src: country.flags.png,
         alt: country.flags.alt,
         class: 'img-fluid rounded-start'
     });
+
+    // Colonne de droite bouton fermer
+    const bouton = createElement('button', { class: 'btn btn-danger w-75 mt-5'}, "FERMER" );
+
+    // Ajouter les enfants
     imgCol.appendChild(img);
+    imgCol.appendChild(bouton)
 
     // Colonne de droite avec les informations
     const infoCol = createElement('div', { class: 'col-md-8' });
     const cardBody = createElement('div', { class: 'card-body' });
-    const title = createElement('h5', { class: 'card-title' }, country.name.common);
+    const title = createElement('h5', { class: 'card-title' }, country.translations.fra.common);
     const list = createElement('ul', { class: 'list-group list-group-flush' });
 
     // Création des éléments de la liste
@@ -63,10 +69,13 @@ function displayCountryDetail(country) {
     row.append(imgCol, infoCol);
     card.appendChild(row);
     detailContainer.appendChild(card);
+
+    // Ecouter
+    bouton.addEventListener('click', () => detailContainer.innerHTML = '');
 }
 
 // Fonction pour afficher la liste des pays
-function displayCountries(countries) {
+function afficherPays(countries) {
     const container = document.getElementById('countries-list');
     container.innerHTML = '';
 
@@ -78,7 +87,7 @@ function displayCountries(countries) {
         });
 
         // Ajout de l'événement de clic
-        card.addEventListener('click', () => displayCountryDetail(country));
+        card.addEventListener('click', () => afficherPaysDetail(country));
 
         // Création de l'image
         const img = createElement('img', {
@@ -90,7 +99,7 @@ function displayCountries(countries) {
 
         // Création du corps de la carte
         const cardBody = createElement('div', { class: 'card-body' });
-        const title = createElement('h5', { class: 'card-title' }, country.name.common);
+        const title = createElement('h5', { class: 'card-title' }, country.translations.fra.common);
         const list = createElement('ul', { class: 'list-unstyled' });
 
         // Ajout des informations de base
@@ -111,12 +120,12 @@ function displayCountries(countries) {
 }
 
 // Fonction asynchrone pour récupérer les pays depuis l'API
-async function fetchCountries() {
+async function test() {
     try {
         const response = await fetch('https://restcountries.com/v3.1/region/europe');
         if (!response.ok) throw new Error('Erreur lors de la récupération des pays');
         const countries = await response.json();
-        displayCountries(countries);
+        afficherPays(countries);
     } catch (error) {
         console.error('Erreur:', error);
         const errorDiv = createElement('div', {
@@ -128,4 +137,4 @@ async function fetchCountries() {
 }
 
 // Chargement des pays au démarrage
-document.addEventListener('DOMContentLoaded', fetchCountries);
+document.addEventListener('DOMContentLoaded', test);
