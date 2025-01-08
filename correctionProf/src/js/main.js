@@ -216,5 +216,4 @@ const initialize = async () => {
     }
 };
 
-//document.addEventListener('DOMContentLoaded', initialize); 
-initialize
+document.addEventListener('DOMContentLoaded', initialize);
